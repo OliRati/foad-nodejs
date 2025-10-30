@@ -9,9 +9,31 @@ fakeid_fill.addEventListener('click', () => {
     interractions.innerText = "Not implemented yet !!!";
 });
 
-fakeid_read.addEventListener('click', () => {
-    console.log('clicked');
+/* Create a new fakeid card and returns its new object */
 
+function createIdCard(id) {
+    const fakeid = document.createElement('div');
+    fakeid.classList.add('fakeid');
+
+    const name = document.createElement('div');
+    name.classList.add('id-name');
+    name.innerText = id.nom + " " + id.prenom;
+    fakeid.append(name);
+
+    const email = document.createElement('div');
+    email.classList.add('id-email');
+    email.innerText = "email: " + id.email;
+    fakeid.append(email);
+
+    const idNumber = document.createElement('div');
+    idNumber.classList.add('id-number');
+    idNumber.innerText = "id: " + id._id;
+    fakeid.append(idNumber);
+
+    return fakeid;
+}
+
+fakeid_read.addEventListener('click', () => {
     fetch(serverUrl)
         .then((response) => {
             if (!response.ok) {
@@ -24,12 +46,13 @@ fakeid_read.addEventListener('click', () => {
         .then((data) => {
             console.log(data);
 
+            // Clear interraction content
             interractions.innerText = "";
+
+            // Fill in with the database content
             data.forEach(id => {
-                interractions.innerText += "id: " + id._id + "\n";
-                interractions.innerText += id.nom + " " + id.prenom + "\n";
-                interractions.innerText += "email: " + id.email + "\n";
-                interractions.innerText += "\n";
+                const card = createIdCard(id)
+                interractions.append(card);
             });
         })
         .catch((error) => {
@@ -38,5 +61,37 @@ fakeid_read.addEventListener('click', () => {
 });
 
 fakeid_item.addEventListener('click', () => {
-    interractions.innerText = "Not implemented yet !!!";
+    const fakeidNumber = document.getElementById('fakeid-number');
+
+    // Get content and removes leading/trailing spaces
+    const content = fakeidNumber.value.trim();
+
+    // Check for correct length
+    if (content.length != 24) {
+        interractions.innerText = "Enter a valid id !!!";
+        return;
+    }
+
+    fetch(serverUrl + "/" + content)
+        .then((response) => {
+            if (!response.ok) {
+                interractions.innerText = "Failed de acces " + serverUrl;
+                throw new Error(`HTTP error ! with Status $(response.status)`);
+            }
+            // Parse response JSON file
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+
+            // Clear interraction content
+            interractions.innerText = "";
+
+            // Create the fakeid card
+            const card = createIdCard(data);
+            interractions.append(card);
+        })
+        .catch((error) => {
+            console.error('Error parsing JSON:', error);
+        })
 });
