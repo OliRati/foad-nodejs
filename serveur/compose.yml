@@ -1,0 +1,32 @@
+name: fakeid
+
+services:
+  mongodb-service:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - fakeid_net
+  
+  node-service:
+    image: node:alpine
+    container_name: node
+    volumes:
+      - ./:/app
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb-service
+    networks:
+      - fakeid_net
+    command: sh -c "npm install && node index.js"
+
+networks:
+  fakeid_net:
+
+volumes:
+  mongodb_data:
