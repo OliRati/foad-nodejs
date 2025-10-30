@@ -19,11 +19,11 @@ router.get('/:id', async (req, res) => {
     try {
         const fakeid = await FakeID.findById(req.params.id);
         if (!fakeid)
-            return res.status(404).json({ error: "FakeID non trouvée !" });ù
+            return res.status(404).json({ error: "FakeID non trouvée !" });
 
         res.json(fakeid);
     } catch (err) {
-        req.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 });
 
