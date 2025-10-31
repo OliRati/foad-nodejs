@@ -1,45 +1,65 @@
-# Node JS , Express , MongoDB
+# Description
 
-Pour cette **FOAD** je vous propose de créer une **api** qui renvoie des **users** sous forme de **json**.
+Creation d'une API permettant d'acceder à une base de donnée retournant des identités fictives
 
-## Git,github
+Creation d'un client Web sur cette API
 
-Vous devez créer un nouveau dépot sur github avec votre solution.
+# Stack utilisée
 
-## Users API
+#### Pour le serveur :
+- Utilisation de Docker avec les technologies :   
+    node.js   
+    express   
+    mongodb
 
-En vous inspirant de ce qu'on a fait et en faisant vos recherches dans les documentations vous devez créer une **api** :
+#### Pour le client :
+- Utilisation de HTML, CSS, JavaScript
 
-Cette **api** devra renvoyer les éléments suivants :
+# Comment utiliser cette application
 
-- prénom
-- nom
-- email
-- âge
-- adresse , dans l'adresse vous devrez avoir :
-    - rue
-    - ville
-    - pays
-- avatar (une image)
+## Lancer le serveur
 
-## Stack utilisé
+Allez dans le répertoire ./serveur du dépot
 
-Rien n'est imposé sur le choix des noms(containers,base de donnée,...),ports,etc ...
+Un fichier compose.yml est disponible pour initialiser la stack avec docker en utilisant la commande :
 
-- docker
-- docker compose
-- node js
-- express
-- mongodb
+( Si vous utilisez Windows penser à lancer l'application "Docker Desktop" avant d'utiliser cette commande )
 
-## Aller plus loin ...
+    docker compose up -d
 
-Pour ceux qui veulent en faire plus :
-
-- Utliser [https://www.npmjs.com/package/@faker-js/faker](https://www.npmjs.com/package/@faker-js/faker) pour insérer des fausses données dans votre base de donnée
-- Séparer votre application en  **client / serveur**:
-  - Créer un dossier **serveur** qui contiendra votre code pour le **serveur** et la **base de donnée** , cela va correspondre à votre **backend**
-  - Créer un dossier **client** ou vous allez faire du **front** , avec une page **html** et du **javascript** qui ira chercher votre **json** envoyé par votre **back** pour créer des **cards** de vos **users**.
+Attendre dans la console Logs du container 'node' que le serveur soit actif. Celle-ci doit afficher :
 
 
-Bon code à vous.
+    Le serveur tourne sur le port 8080
+    Connecté à mongodb
+
+
+Prenez votre plus beau navigateur et rendez-vous a l'addresse :
+
+    http://127.0.0.1:8080/api/fakeid
+
+pour acceder au contenu de la base de données.
+
+
+effectuer un POST sur cette même adresse pour inserer une donnee dans la base de donnée.
+
+par exemple envoyer 
+
+    {
+    "prenom": "Paul",
+    "nom": "Martin",
+    "email": "paul.martin@fake.fake",
+    "age": "18",
+    "rue": "De la Motte",
+    "ville": "Trifouilly les trois galoches",
+    "pays": "France",
+    "avatar": "paul_martin_00000000.jpg"
+    }
+
+
+## Lancer le client
+
+Si vous utilisez VSCODE, allez dans le repertoire ./client du depot et lancer un live server sur le fichier 'index.html'
+
+à ce jour le client permet la lecture de la base de données et la lecture d'une donnée par son _id.  
+Le remplissage de la base de données n'est pas encore implémenté.
